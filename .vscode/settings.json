@@ -1,0 +1,19 @@
+{
+    "latex-workshop.latex.recipes": [
+        { "name": "latexmk (SnS)", "tools": ["latexmk-sns"] }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk-sns",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd \"$0\" && latexmk \"$1\"",
+                "%WORKSPACE_FOLDER%",
+                "%DOC_EXT%"
+            ]
+        }
+    ],
+    "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/build",
+    "latex-workshop.latex.autoBuild.run": "never"
+}

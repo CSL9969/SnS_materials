@@ -1,0 +1,148 @@
+% ============================================================
+% signals-style.sty
+% A custom style file for EN1020 / signals-and-systems tutorials
+%
+% Usage (one .tex file per document):
+%   \usepackage{signals-style}            % tutorial sheet
+%   \usepackage[answers]{signals-style}   % answer sheet (title says "Answers")
+%
+% Everything below is grouped by "what it customizes" so you can
+% comment/uncomment or edit sections independently.
+% ============================================================
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{signals-style}[2025/01/01 Signals tutorial style]
+
+% ------------------------------------------------------------
+% 0. OPTIONS
+% [answers] appends "Answers" to the title block made by \tutorialpage.
+% ------------------------------------------------------------
+\newcommand{\tutorialsuffix}{}
+\DeclareOption{answers}{\renewcommand{\tutorialsuffix}{\,Answers}}
+\ProcessOptions\relax
+
+% ------------------------------------------------------------
+% 1. BASE PACKAGES
+% ------------------------------------------------------------
+\RequirePackage[margin=1in]{geometry}   % page margins
+\RequirePackage{amsmath,amssymb}        % math
+\RequirePackage{tikz}                   % figures
+\RequirePackage[inline]{enumitem}       % custom lists (inline = allows enumerate*)
+\RequirePackage{xcolor}                 % colors
+\RequirePackage{fancyhdr}               % headers/footers
+\RequirePackage{titlesec}               % section title formatting
+\RequirePackage{hyperref}               % clickable refs/links
+\RequirePackage{pgfplots}               % Drawing plots
+\RequirePackage{caption}                % captioning
+\RequirePackage{multicol}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{graphicx}
+\RequirePackage{subcaption}
+
+% ------------------------------------------------------------
+% 2. COLOR PALETTE
+% Change these hex values to re-theme the whole document.
+% ------------------------------------------------------------
+\definecolor{signalblue}{HTML}{1B4F72}   % headings
+\definecolor{signalgray}{HTML}{5D6D7E}   % rules, footer text
+\definecolor{signalaccent}{HTML}{C0392B} % emphasis / answer boxes
+
+% ------------------------------------------------------------
+% 3. FONT CHOICE
+% Swap the font family here. Comment out for LaTeX's default
+% Computer Modern. Requires a modern TeX engine (pdflatex is fine
+% for these three; for wider font support use xelatex/lualatex).
+% ------------------------------------------------------------
+% \RequirePackage{lmodern}        % clean modern replacement for CM
+% \RequirePackage{mathpazo}       % Palatino-like text + math
+\RequirePackage{mathptmx}       % Times New Roman-equivalent text + math (Adobe Times / Nimbus Roman)
+% Note: true Times New Roman is a proprietary Microsoft font and isn't
+% redistributable with LaTeX. mathptmx uses "Times"/Nimbus Roman, a
+% metric-compatible look-alike -- visually indistinguishable in body text.
+% If you have real Times New Roman installed and compile with xelatex or
+% lualatex instead of pdflatex, use this instead:
+%   \RequirePackage{fontspec}
+%   \setmainfont{Times New Roman}
+
+% ------------------------------------------------------------
+% 4. SECTION / TITLE FORMATTING
+% ------------------------------------------------------------
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{signalblue}}
+  {\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{signalblue}}
+  {\thesubsection}{0.6em}{}
+
+% ------------------------------------------------------------
+% 5. HEADER / FOOTER
+% Edit \coursecode, \coursename, \tutorialnum below (or just
+% redefine them in main.tex after loading this package).
+% ------------------------------------------------------------
+\newcommand{\coursename}{Signals and Systems}
+\newcommand{\tutorialnum}{01}
+ 
+\setlength{\headheight}{14pt}   % avoids fancyhdr's "headheight too small" warning
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+\fancyhead[L]{\small\color{signalgray}\coursename}
+\fancyhead[R]{\small\color{signalgray}Tutorial \tutorialnum}
+\fancyfoot[C]{\small\color{signalgray}\thepage}
+
+% ------------------------------------------------------------
+% 6. LIST STYLE (used for question sub-parts (a), (b), (c) ...)
+% ------------------------------------------------------------
+\setlist[enumerate,1]{label=\arabic*., leftmargin=1.6em}
+\setlist[enumerate,2]{label=(\alph*), leftmargin=2.2em, , itemjoin={\quad\quad}}
+
+% ------------------------------------------------------------
+% 7. CUSTOM COMMANDS
+% Shortcuts you'll reuse constantly in signals problems.
+% ------------------------------------------------------------
+\newcommand{\ct}[1]{#1(t)}              % continuous-time signal, e.g. \ct{x}
+\newcommand{\dt}[1]{#1[n]}              % discrete-time signal, e.g. \dt{x}
+\newcommand{\ejw}[1]{e^{j#1}}           % complex exponential shorthand
+\newcommand{\ushift}[2]{u(#1 - #2)}     % shifted unit step
+\newcommand{\dshift}[2]{\delta(#1 - #2)} % shifted impulse
+
+% A highlighted "answer" or "key result" box
+\newenvironment{keyresult}{%
+  \par\vspace{0.5em}\noindent
+  \color{signalaccent}\bfseries Key result: \normalfont\color{black}
+}{%
+  \par\vspace{0.5em}
+}
+
+% A title block matching the original tutorial header style
+\newcommand{\tutorialtitle}[2]{%
+  % #1 = title line, #2 = date
+  \begin{center}
+    \textbf{#1}\\
+    #2
+  \end{center}
+  \vspace{1em}
+}
+
+% Starts a new tutorial on a fresh page, updates the tutorial number
+% (which the running header also uses), and prints the title block.
+% Usage:  \tutorialpage{02}{September 2026}
+\newcommand{\tutorialpage}[2]{%
+  \clearpage
+  \renewcommand{\tutorialnum}{#1}%
+  \tutorialtitle{\coursename: TUTORIAL \tutorialnum\tutorialsuffix}{#2}%
+}
+
+% ------------------------------------------------------------
+% 8. HYPERLINK COLORS (for \label/\ref and any URLs)
+% ------------------------------------------------------------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=signalblue,
+  urlcolor=signalblue,
+  citecolor=signalblue
+}
+
+\endinput
